@@ -1,7 +1,6 @@
 # supervised-project-nlp
 
 transfer learning with STT dataset:
-experiments with federation of 3 devices:
 
 |    |   CNN |   RNN |   BERT | ROBERTA | ALBERT | 
 |---:|---------:|---------:|---------:|---------:|---------:|
