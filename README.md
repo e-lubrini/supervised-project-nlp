@@ -1,5 +1,16 @@
 # supervised-project-nlp
 
+transfer learning with STT dataset:
+experiments with federation of 3 devices:
+
+|    |   CNN |   RNN |   BERT | ROBERTA | ALBERT | 
+|---:|---------:|---------:|---------:|---------:|---------:|
+|  f-score |       80% |       82% |       89% | 95% | 91% | 
+
+
+
+
+
 before creating the whole model some experiments were made in order to understand which parameters should be used for training
 
 experiments with 50 first subsets of an SNLI dataset from [SentEval](https://github.com/facebookresearch/SentEval) (details of division in the script) in order to understand which epoch is the best for stopping (the best result is in bold):
