@@ -2,9 +2,9 @@
 
 transfer learning with STT dataset:
 
-|    |   CNN |   RNN |   BERT | ROBERTA | ALBERT | 
-|---:|---------:|---------:|---------:|---------:|---------:|
-|  f-score |       80% |       82% |       89% | 95% | 91% | 
+|    |   CNN |   RNN |   BERT | ROBERTA | ALBERT | [SOTA](https://paperswithcode.com/paper/smart-robust-and-efficient-fine-tuning-for)  | 
+|---:|---------:|---------:|---------:|---------:|---------:|---------:|
+|  f-score |       80% |       82% |       89% | 95% | 91% | 97.5%  | 
 
 
 
