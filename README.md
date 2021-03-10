@@ -1,5 +1,8 @@
 # supervised-project-nlp
 
+[progress report](https://docs.google.com/document/d/13fx_3LMoLShKbPzI-2fJONHDYD5REDFCP9afX1Fp9HI/edit?usp=sharing)
+
+
 transfer learning with STT dataset:
 
 |    |   CNN |   RNN |   BERT | ROBERTA | ALBERT | [SOTA](https://paperswithcode.com/paper/smart-robust-and-efficient-fine-tuning-for)  | 
