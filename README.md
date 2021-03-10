@@ -1,7 +1,7 @@
 # supervised-project-nlp
 
 [progress report](https://docs.google.com/document/d/13fx_3LMoLShKbPzI-2fJONHDYD5REDFCP9afX1Fp9HI/edit?usp=sharing)
-
+[plan](https://docs.google.com/spreadsheets/d/167qXpaAgP33eXqeAcZWU0vf8kWOkBBzywC0TKt9r3KU/edit?usp=sharing)
 
 transfer learning with STT dataset:
 
