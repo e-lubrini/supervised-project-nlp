@@ -1,0 +1,104 @@
+\documentclass{esannV2}
+\usepackage[dvips]{graphicx}
+\usepackage[latin1]{inputenc}
+\usepackage{amssymb,amsmath,array}
+
+\usepackage{xcolor}
+\usepackage{hyperref}
+\urlstyle{same}
+
+%
+\voffset 0 cm \hoffset 0 cm \addtolength{\textwidth}{0cm}
+\addtolength{\textheight}{0cm}\addtolength{\leftmargin}{0cm}
+
+
+\begin{document}
+%style file for ESANN manuscripts
+\title{Few-shot on Federated Learning}
+
+%***********************************************************************
+% AUTHORS INFORMATION AREA
+%***********************************************************************
+
+\author{Anna Mosolova$^1$, Elisa Lubrini$^1$ and Christophe Cerisara$^2$ 
+
+% DO NOT MODIFY THE FOLLOWING '\vspace' ARGUMENT
+\vspace{.3cm}\\
+%
+% Addresses and institutions (remove "1- " in case of a single institution)
+1- Universite de Lorraine - IDMC \\
+Pole Herbert Simon, 13 Rue Michel Ney, 54000 Nancy - France
+%
+% Remove the next three lines in case of a single institution
+\vspace{.1cm}\\
+2- Inria - Dept of Second Author \\
+Address of Second Author's school - France\\
+}
+%***********************************************************************
+% END OF AUTHORS INFORMATION AREA
+%***********************************************************************
+
+\maketitle
+
+\begin{abstract}
+Current restrictions on confidentiality often prevent data from leaving personal devices and being sent to a central server on which a central model is trained. The problem of machine learning being hindered by scarcity of data can be tackled using few-shot learning (FSL) techniques. In this paper we explore the a possible application of few-shot learning to a federated dataset, where each node (or device) only holds a very limited amount of data. Our experiments are carried out using Google's T5 model, which is designed to perform well on data-scarce tasks. The results of a few experiments are reported, together with a brief summary of our findings.
+\end{abstract}
+
+\section{Introduction}
+\textcolor{green}{\textbf{[...]}}
+
+\subsection{Federated learning}
+Federated learning is a technique that has been raising in popularity since it was first introduced by Google in 2016. The concept behind federated learning is that of training models on users' devices so that service providers can benefit from a model that has full access to private data, without the need for them to access such data directly.
+
+\subsection{Few-shot learning}
+Few-shot learning is a machine learning method used to generalise to a new task based on prior knowledge of other tasks \cite{wang2020generalizing}. It is mainly used when limited data is available \textcolor{green}{\textbf{[...]}}
+
+\subsection{Related work}
+According to our knowledge, no experiments have been published so far applying few-shot learning to federated datasets. 
+\textcolor{green}{\textbf{[...]}}
+
+\section{Method}
+Our experiments will consist in the application of few shot learning on two datasets for sentiment analysis. The first, Amazon Review \cite{keung2020multilingual} has proven to perform well with few-shot learning and will be separated into nodes which each represent a device in a federated setting. The second, Sent140 \cite{caldas2019leaf}, is a federated dataset composed of Twitter comments, where each user corresponds to a node. We will use Google's T5 model, which is designed to perform well on tasks for which data is particularly scarce. Our results will then be compared with the current benchmark for each dataset \textcolor{green}{\textbf{\cite{Bench1}}} \textcolor{green}{\textbf{\cite{Bench2}}}
+ 
+\subsection{Text-To-Text Transfer Transformer}
+Text-To-Text Transfer Transformer (T5) \cite{t5} is a language model with a text-to-text framework where the input consists in the description of the task and the data on which the task is to be carried out.
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\textwidth]{pics/T5.png}
+\caption{T5 input and output examples, as illustrated in the original paper \cite{t5}.}
+\label{fig:user}
+\end{center}
+\end{figure}
+
+\subsection{Datasets}
+The Multilingual Amazon Review Corpus (MARC) \cite{keung2020multilingual} \textcolor{green}{\textbf{[...]}}
+
+
+Sent140 \cite{caldas2019leaf} is a federated dataset whose tweets are automatically annotated based on the emoticons present in them. Each device is represented by a different twitter user.
+
+\section{Experiments}
+\textcolor{green}{\textbf{[...]}}
+
+\section{Results}
+\textcolor{green}{\textbf{[...]}}
+
+\section{Conclusion}
+\textcolor{green}{\textbf{[...]}}
+
+
+% ****************************************************************************
+% BIBLIOGRAPHY AREA
+% ****************************************************************************
+
+\begin{footnotesize}
+
+\bibliographystyle{unsrt}
+\bibliography{bib.bib}
+
+\end{footnotesize}
+
+%\include{template}
+
+
+\end{document}
