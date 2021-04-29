@@ -3,9 +3,6 @@
 \usepackage[latin1]{inputenc}
 \usepackage{amssymb,amsmath,array}
 
-\usepackage{hyperref}
-\urlstyle{same}
-
 %***********************************************************************
 % !!!! IMPORTANT NOTICE ON TEXT MARGINS !!!!!
 %***********************************************************************
@@ -39,29 +36,28 @@
 
 \begin{document}
 %style file for ESANN manuscripts
-\title{Few-shot on Federated Learning}
+\title{LaTeX style file for ESANN manuscripts}
 
 %***********************************************************************
 % AUTHORS INFORMATION AREA
 %***********************************************************************
-
-\author{Anna Mosolova$^1$, Elisa Lubrini$^1$ and Christophe Cerisara$^2$ 
-
+\author{First author$^1$ and Second author$^2$
 %
 % Optional short acknowledgment: remove next line if non-needed
-%\thanks{This is an optional funding source acknowledgement.}
+\thanks{This is an optional funding source acknowledgement.}
 %
 % DO NOT MODIFY THE FOLLOWING '\vspace' ARGUMENT
 \vspace{.3cm}\\
 %
 % Addresses and institutions (remove "1- " in case of a single institution)
-1- Universite de Lorraine - IDMC \\
-Pole Herbert Simon, 13 Rue Michel Ney, 54000 Nancy - France
+1- School of First Author - Dept of First Author \\
+Address of First Author's school - Country of First Author's
+school
 %
 % Remove the next three lines in case of a single institution
 \vspace{.1cm}\\
-2- Inria - Dept of Second Author \\
-Address of Second Author's school - France\\
+2- School of Second Author - Dept of Second Author \\
+Address of Second Author's school - Country of Second Author's school\\
 }
 %***********************************************************************
 % END OF AUTHORS INFORMATION AREA
@@ -70,7 +66,12 @@ Address of Second Author's school - France\\
 \maketitle
 
 \begin{abstract}
-Current restrictions on confidentiality often prevent data from leaving personal devices and being sent to a central server on which a central model is trained. The problem of machine learning being hindered by scarcity of data can be tackled using few-shot learning (FSL) techniques. In this paper we explore the a possible application of few-shot learning to a federated dataset, where each node (or device) only holds a very limited amount of data. Our experiments are carried out using the T5 model, ......... The results of a few experiments are reported, together with a brief summary of our findings.
+Type your 100 words abstract here. Please do not modify the style
+of the paper. In particular, keep the text offsets to zero when
+possible (see above in this `ESANNV2.tex' sample file). You may
+\emph{slightly} modify it when necessary, but strictly respecting
+the margin requirements is mandatory (see the instructions to
+authors for more details).
 \end{abstract}
 
 \section{Typesetting an ESANN document using \LaTeX}
@@ -204,58 +205,13 @@ University, Sheffield, S10 2UR, England, October 1997.
 % - DELETE THE TEXT BETWEEN THE TWO ABOVE DASHED LINES
 % - UNCOMMENT THE NEXT TWO LINES AND REPLACE 'Name_Of_Your_BibFile'
 
-\bibliographystyle{unsrt}
-\bibliography{Name_Of_Your_BibFile}
+%\bibliographystyle{unsrt}
+%\bibliography{Name_Of_Your_BibFile}
 
 \end{footnotesize}
 
 % ****************************************************************************
 % END OF BIBLIOGRAPHY AREA
 % ****************************************************************************
+
 \end{document}
-
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|c|c|c|c|}
-    \hline
-    Training & Mean accuracy (\%) & Books & DVD & Electronics & KH \\
-    \hline
-    Books.t2 & 91 & 92 &  \\
-    Books.t4 & 94 \\
-    Books.t5 & 73 \\
-    Dvd.t2 & 84 \\
-    Dvd.t4 & 92 \\
-    Dvd.t5 & 74 \\
-    Electronics.t2 & 89 \\
-    Electronics.t4 & 91 \\
-    Electronics.t5 & 77 \\
-    Kitchen housewares.t2 & 87 \\
-    Kitchen housewares.t4 & 93 \\
-    Kitchen housewares.t5 & 78 \\
-    \hline
-  \end{tabular}
-  \caption{Results obtained with BART after training on books domain.}\label{Tab:bart_books}
-\end{table}
-
-\begin{table}[h!]
-  \centering
-  \begin{tabular}{|c|c|}
-    \hline
-    Training & Mean accuracy (\%) \\
-    \hline
-    Books.t2 & 92 \\
-    Books.t4 & 95 \\
-    Books.t5 & 73 \\
-    Dvd.t2 & 86 \\
-    Dvd.t4 & 92 \\
-    Dvd.t5 & 74 \\
-    Electronics.t2 & 88 \\
-    Electronics.t4 & 90 \\
-    Electronics.t5 & 78 \\
-    Kitchen housewares.t2 & 86 \\
-    Kitchen housewares.t4 & 93 \\
-    Kitchen housewares.t5 & 77 \\
-    \hline
-  \end{tabular}
-  \caption{Results obtained with BART after training on dvd domain.}\label{Tab:bart_dvd}
-\end{table}

@@ -14,23 +14,26 @@
 
 \begin{document}
 %style file for ESANN manuscripts
-\title{A Study of Few-shot Learning on a Federated Setting}
+\title{A Study of Few-shot Learning Text Classification on a Federated Setting}
 
+%***********************************************************************
+% AUTHORS INFORMATION AREA
+%***********************************************************************
 
-\author{Anna Mosolova$^1$, Elisa Lubrini$^1$ and Christophe Cerisara$^2$ 
+\author{Anna Mosolova$^{1, 2}$, Elisa Lubrini$^{1, 2}$ and Christophe Cerisara$^2$ 
+
+% Optional short acknowledgment: remove next line if non-needed
+\thanks{Experiments presented in this paper were carried out using the Grid'5000 testbed, supported by a scientific interest group hosted by Inria and including CNRS, RENATER and several Universities as well as other organizations (see https://www.grid5000.fr (https://www.grid5000.fr/)).}
 
 % DO NOT MODIFY THE FOLLOWING '\vspace' ARGUMENT
 \vspace{.3cm}\\
 %
 % Addresses and institutions (remove "1- " in case of a single institution)
-1- Universite de Lorraine - IDMC \\
-Pole Herbert Simon, 13 Rue Michel Ney, 54000 Nancy - France
+1- Universite de Lorraine - IDMC \\ F-54000 Nancy - France
 %
 % Remove the next three lines in case of a single institution
 \vspace{.1cm}\\
-2- Inria - \textcolor{green}{Dept of Second Author} \\
-\textcolor{green}{Address of Second Author's school} - France\\
-}
+2- Universite de Lorraine - CRNS, LORIA \\ F-54000 Nancy - France\\}
 %***********************************************************************
 % END OF AUTHORS INFORMATION AREA
 %***********************************************************************
@@ -46,167 +49,174 @@ Current restrictions on confidentiality often prevent data from leaving personal
 
 
 \section{Introduction}
-Developing approaches to work with limited amount of data is becoming increasingly important, as legal restrictions make it harder and harder to access private data on personal devices.
+Developing approaches to work with limited amount of data is becoming increasingly important, as legal measures are nowadays raising the confidentiality of private data on personal devices. Additionally, BERT-like models are becoming a standard approach to carry out NLP tasks and they allow fine-tuning with small amounts of data.
 
-Federated learning \cite{mcmahan2017communication}, a technique that has been raising in popularity since it was first introduced by Google in 2016, proposes a solution to the problem, allowing to train models on users' devices so that service providers can benefit from a model that has full access to private data, without the need for them to access such data directly.
+Federated learning \cite{fedavg}, a technique that has been raising in popularity since it was first introduced by Google in 2016, proposes to train models on users' devices so that service providers can benefit from a model that has full access to private data, without the need for them to access such data directly or gather all the data in a single dataset. This would result in multiple models being trained, each on its corresponding device, and then joined in a single model that is then sent back to each device for fine-tuning.
 
-Various architectures and methods are possible, both for the training of the single peripheral models and for merging the models into a single one. In this paper we want to propose the use of few-shot learning, a machine learning method used to generalise to a new task based on prior knowledge of other tasks \cite{wang2020generalizing}.
+However, given the frequency of communication between nodes required during the learning process, a consistent limitation is that local devices are expected to have a relatively high amount of computing power, local memory and a high bandwidth connection \cite{problems}.
 
-According to our knowledge, no experiments have been published so far applying few-shot learning to federated datasets and, given the timely relevance of finding optimal solutions to working with federated datasets, this paper aims to contribute to the field by reporting some of our related experiments.
+Another downside is the bias that each node can have towards the whole dataset, given the heterogeneity of local datasets. This heterogeneity is also time-bound in that distribution within the dataset can vary with time \cite{problems}.
+
+Additionally, federated learning is often hindered by the scarcity of data on some devices \cite{problems}.
+
+Various architectures and methods are possible, both for the training of the single peripheral models and for merging the models into a single one. In this paper we want to propose the use of few-shot learning (FSL), a machine learning method used to generalise to a new task based on prior knowledge of other tasks \cite{wang2020generalizing}.
+
+To tackle the aforementioned problems affecting the federated learning setting, we experiment with two FSL architectures: the Induction Network and a pretrained BART model. The first offers a solution that does not require frequent communication between nodes and is constituted by a relatively lightweight model, alleviating the bandwidth, memory, and power requirements of the local devices. The second proposes an alternative that works on devices with small amounts of data and is less sensitive to bias compared to other solutions thanks to its relatively stable general weights that are not easily affected by smaller local models. 
+
+According to our knowledge, no experiments have been published so far applying FSL architectures on NLP tasks in federated settings, given the timely relevance of finding optimal solutions to working with federated datasets, this paper aims to contribute to the field by reporting some of our experiments with their relative results.
+
+
+%***********************************************************************
+
+
+\section{Related Work}
+There exist a standard procedure to evaluate a Few-shot learning system based on the Amazon Review dataset proposed in \cite{yu2018diverse}. Several models were already tested with this dataset, like \cite{yu2018diverse}, \cite{mishra2018simple} and others.
+
+Current state-of-the-art result for the Amazon Review dataset is obtained in the paper by R. Geng et al.\cite{geng-etal-2019-induction}. They introduce the Induction Network, a system based on several modules that is capable of predicting a new class after fine-tuning on only several examples from it. This model uses the concept of classes examples and queries which are compared with each class in order to identify the target class. It consists of 3 sub-parts: an Encoder module, an Induction module and a Relation module. An Encoder model is a biRNN with self-attention which is used to encode the class examples and the queries. Then an Induction module, which is implemented as the dynamic routing algorithm with one output capsule, squeezes representation of each class into one vector which is then called a class vector. After this, the Relation module computes the similarity score between query representation and each class representations using the neural tensor layer. The main contribution of this paper is the algorithm that allows us to add quickly a new class into our algorithm without long training and having a lot of examples for it.
+
+One of the recent models that showed a near SoTA performance on a wide range of NLP tasks is the BART model introduced in \cite{lewis2019bart}. This model is an autoencoder built using a standard Transformer architecture to restore the previously corrupted text. 
 
 
 %***********************************************************************
 
 
 \section{Methodology}
-Our experiments consist in the study of few-shot learning in a federated setting. Concretely, we use the Amazon Review dataset \cite{yu2018diverse} for sentiment analysis by distributing its data across a number of nodes (representing devices in a federated setting) each of which is then used to train a separate model.
+Our experiments consist in the study of few-shot learning in a federated setting. We distribute the data across a number of nodes (representing devices in a federated setting) each of which is then used to train a separate model.
 
-We experiment with two different architectures: during a first experiment, each node will be trained using an Induction Network (IN) with meta-learning \cite{geng2019induction}, and in a second experiment the training will consist in fine-tuning pretrained BART models \cite{lewis2019bart}.
+We experiment with two different architectures: during a first experiment, each node will be trained using an Induction Network (IN)\cite{geng-etal-2019-induction}, and in a second experiment the training will consist in fine-tuning pretrained BART models \cite{lewis2019bart}.
 
-The reviews are divided in 23 categories according to the kind of product being reviewed. In order to accommodate the needs and limitations of each architecture, the dataset was distributed across the nodes in two different ways, for the training and test of: (1) the IN, and (2) the BART model. 
+In order to accommodate the needs and limitations of each architecture, the dataset was distributed across the nodes in two different ways, for the training and test of: (1) the IN (Section \ref{data_in}), and (2) the BART model (Section \ref{data_b}).
 
 In each of the two experiments, once the models were trained they were used to instantiate two ensemble learning methods: averaging \cite{fedavg} and stacking \cite{wolpert}. The results were then compared to the corresponding baselines: the IN SoTA for the first experiment, and zero-shot \cite{zero} learning with BART models for the second experiment. 
-
-    \subsection{Induction Networks}
-    For the training, the samples were split into three sections, each of the three being assigned the reviews from 6 or 7 categories, as shown in Table \ref{tab:cats_in}. The remaining 4 categories were used for training.
-        
-    \setlength\parindent{24pt}
-    \begin{table}[h!]
-    \centering
-    \hspace*{-50pt}\begin{tabular}{|c|c|c|}
-    \hline
-    Node & Ex. & Categories\\
-    \hline
-    1. & 23105 & apparel, office products, automotive, toys games, computer video games, software\\
-    2. & 18146 & grocery, beauty, magazines, jewelry watches, sports outdoors, cell phones service, baby\\
-    3. & 54333 & outdoor living, video, camera photo, health personal care, gourmet food, music\\
-    \textit{Test} & \textit{120} & \textit{books, dvd, electronics, kitchen housewares}\\
-    \hline
-    \end{tabular}
-    \caption{Portions of the dataset assigned to each node in the IN experiments.}\label{tab:cats_in}
-    \end{table}
     
-    We reused the implementation of the Induction Network by Zhongyu Chen\footnote{https://github.com/zhongyuchen/few-shot-text-classification}. After assigning to each node the relative categories (Table \ref{tab:cats_in}), each of the nodes was initialized as a separate model and trained only on the examples from the selected category. In order to combine the models and evaluate the resulting quality, we used averaging and stacking.
     
-    The first one consisted in averaging the predicted probabilities from all models in order to obtain the final prediction. 
-    
-    For the stacking model we retrained the second node without the \textit{baby} category, so it has seen the examples only from the first 6 topics. Each model was then used to predict the probability distribution for the \textit{baby} domain. After this, they were used as features for training a meta-learner. As a meta-learner we tried several classical machine learning algorithms (Logistic Regression, Decision Trees and Support Vector Machines) as well as simple multi-layer perceptron. Usage of logistic regression as a meta-learner showed the best result which is reported in the next section.
-    
-    \subsection{BART} Since our BART model is pretrained, it is expected to produce good results with less examples, compared to the IN. For this reason, only the 4 categories previously used for testing (Table \ref{tab:cats_in}) were used, each to train a separate node with 30 examples (15 positive and 15 negative), as shown in Table \ref{tab:cats_b}.
-        
-    \begin{table}[h!]
-    \centering
-    \begin{tabular}{|c|c|c|}
-    \hline
-    Node & Ex. & Categories\\
-    \hline
-    1. & 30 & books\\
-    2. & 30 & dvd\\
-    3. & 30 & electronics\\
-    4. & 30 & kitchen housewares\\
-    \textit{Test} & \textit{120} & \textit{books, dvd, electronics, kitchen housewares}\\
-    \hline
-    \end{tabular}
-    \caption{Portions of the dataset assigned to each node in the BART experiments.}\label{tab:cats_b}
-    \end{table}
-    
-    First, we tried to evaluate the model without any training (Zero-shot learning setting), to use the results as a baseline. Subsequently, we fine-tuned 4 separate BART models using 3 support sets from the test data of the Amazon reviews dataset. We applied several combination methods on the resulting nodes. The first one was standard averaging consisting in averaging the probabilities from 4 models and outputting the results based on the final probabilities. The second one was weighted averaging that reused the previously described strategy but assigning to each node its own coefficient of contribution to the final prediction depending on its performance on the development set\footnote{The development set was constructed from 601 examples from the training set of the \textit{automative} domain.}. The third method was to apply the Federated Averaging strategy\cite{mcmahan2017communication} during the training of 4 nodes. This strategy consists in training models on separate nodes, then sending their weights to the server, averaging them and sending them back for a new round of training. 
-
-        \begin{figure}[h!]
-        \begin{center}
-        \includegraphics[width=8cm]{pics/dev.jpg}
-        \caption[]{Evolution of the accuracy during fine-tuning on the development corpus.}
-        \label{fig:dev}
-        \end{center}
-        \end{figure}
-
-
 %***********************************************************************
 
         
-    \section{Experiments}
+\section{Experiments}
         
-        \subsection{Experimental Settings}
-        \paragraph{Dataset} The dataset used for the experiments was the Amazon Review dataset from \cite{yu2018diverse}\footnote{The dataset is available at \url{https://github.com/Gorov/DiverseFewShot_Amazon}.}.
-        For the BART experiments, each node was trained based on 3 labelling criterion (reviews from $n$ stars up being considered positive, with $n = 2$, $n = 4$, and $n = 5$), with each node being fine-tuned on 30 different examples, 10 per labelling criterion (5 positive and 5 negative).
+    \subsection{Experimental Settings}
+    
+    All the experiments were conducted using the Amazon Review dataset \cite{yu2018diverse}\footnote{The dataset is available at \url{https://github.com/Gorov/DiverseFewShot_Amazon}.}, which is composed of reviews divided in 23 categories according to the kind of product being reviewed.
+            
+        \subsubsection{Induction Networks}
+        \label{data_in}
+        For the training, the samples were split into three sections, each of the three being assigned the reviews from 6 or 7 categories and the remaining 4 categories were used for testing\footnote{
+        \textbf{Node 1:} 23105 examples - apparel, office products, automotive, toys games, computer video games, software.
+        \textbf{Node 2:} 18146 examples - grocery, beauty, magazines, jewelry watches, sports outdoors, cell phones service, baby.
+        \textbf{Node 3:} 54333 examples - outdoor living, video, camera photo, health personal care, gourmet food, music.
+        \textbf{Test:} 21064 examples - books, dvd, electronics, kitchen housewares.}.
         
-        \paragraph{IN baseline} As a baseline, we used the original Induction Network introduced in \cite{geng2019induction} which was trained on the whole training set (19 domains). We compared its results with the results of the nodes which were the IN trained only on subparts of the original dataset. In addition to this, we evaluated their quality in a federated setting by averaging and stacking the predictions of the nodes.
+            
+        As a baseline, we used the original Induction Network introduced in \cite{geng-etal-2019-induction} which was trained on the whole training set (19 domains). % [just a repetition of the next section] We compared its results with the results of the nodes which were the IN trained only on subparts of the original dataset. In addition to this, we evaluated their quality in a federated setting by averaging and stacking the predictions of the nodes.
         
-        \paragraph{BART general settings} BART-MNLI-large\footnote{\url{https://huggingface.co/facebook/bart-large-mnli} (accessed on April, 1, 2021)} from HuggingFace, was used according to different settings: (1) Zero-shot one, (2) training on 12 support sets from the test data, (3) training 4 separate models on the support sets corresponding to one of the test domains and then combining them using several averaging strategies.
+        For our experiments we reused the implementation of the Induction Network by Zhongyu Chen\footnote{https://github.com/zhongyuchen/few-shot-text-classification}. Each node with the assigned to it categories was initialized as a separate model and trained only on the examples from the selected category. Then these models were combined. 
         
-        \paragraph{weighted averaging} For weighted averaging we used the following coefficients: books - 0.1, dvd - 0.3, electronics - 0.4, kitchen housewares - 0.2 that were selected experimentally. The last one is training 4 BART nodes using Federated Averaging. 
+        The first methodology that we used was averaging which consisted in averaging the predicted probabilities from all models in order to obtain the final prediction. 
         
-        \paragraph{Hyper-parameters tuning}
-        BART's hyper-parameters have been manually tuned with a few trials-and-errors
-        on a development set extracted from the \textit{automotive} subset of the Amazon Reviews corpus.
-        The development set is composed of 30 sentences for fine-tuning, and 600 sentences to compute the sentiment accuracy obtained with the fine-tuned BART-MNLI-large model.
+        The second approach was stacking for which we retrained the second node without the \textit{baby} category, so it has seen the examples only from the first 6 topics. Each model was then used to predict the probability distribution for the \textit{baby} domain. After this, they were used as features for training a meta-learner. As a meta-learner we tried several classical machine learning algorithms (Logistic Regression, Decision Trees and Support Vector Machines) as well as simple multi-layer perceptron. Usage of logistic regression as a meta-learner showed the best result which is reported in the Section \ref{results}. 
         
-        We have tried three fine-tuning strategies: (1) fine-tuning the full BART model, (2) fine-tuning only the first self-attention layer, (3) fine-tuning the inputs, outputs and layer normalization, following~\cite{}.
         
-        The best hyper-parameters were achieved by fine-tuning all BART parameters, with a learning rate of $\lambda = 10^{-4}$ and 100 epochs. Figure~\ref{fig:dev} shows the evolution of the accuracy on the 600 development sentences during fine-tuning. We can observe that there does not seem to be any overfitting and that the performances plateau after epoch 100.
+    \subsubsection{BART}
+        \label{data_b}
+        
+        For the BART experiments, each node was trained based on 3 labelling criterion (reviews from $n$ stars up being considered positive, with $n = 2$, $n = 4$, and $n = 5$), with each node being fine-tuned on 30 different examples, 10 per labelling criterion (5 positive and 5 negative). Each node was trained on only one of the 4 testing categories, and tested on all of them.\footnote{
+        \textbf{Node 1:} 30 examples - books.
+        \textbf{Node 2:} 30 examples - dvd.
+        \textbf{Node 3:} 30 examples - electronics.
+        \textbf{Node 4:} 30 examples - kitchen housewares.
+        \textbf{Test:} 21064 examples - books, dvd, electronics, kitchen housewares.}.
+
+    As a baseline for the BART model we used a zero-shot learning strategy, namely we evaluated the model on the test set without any prior training. 
+    
+    The BART-MNLI model that we used for our experiments was trained for the natural language inference task, so we transformed each training and test sample into two phrases of the following pattern: \textit{a) $<$source sentence$>$. This text is positive} or \textit{b) $<$source sentence$>$. This text is negative}. By obtaining the probabilities of the second sentence being an entailment, we consider the first sentence to be positive if the probability of the phrase $a$ is higher than of the phrase $b$, otherwise we say that this sentence is negative.
+    
+    BART-MNLI-large\footnote{\url{https://huggingface.co/facebook/bart-large-mnli} (accessed on April, 1, 2021)} from HuggingFace, was used according to different settings: (1) training on 12 support sets from the test data, (2) training 4 separate models on the support sets corresponding to one of the test domains and then combining them using several averaging strategies, (3) training 4 separate models with applying the Federated Averaging strategy\cite{fedavg}. %This strategy consists in training models on separate nodes, then sending their weights to the server, averaging them and sending them back for a new round of training. 
+    For the second setting we used standard and weighted averaging. For the first option we averaged the predicted probabilities from 4 models in order to obtain the final prediction. For the second one, before computing the final prediction, we assign to each node its coefficient of contribution depending on its performance on the development set\footnote{The development set was constructed from 601 examples from the training set of the \textit{automative} domain}. After several trials, we used the following coefficients: books - 0.1, dvd - 0.3, electronics - 0.4, kitchen housewares - 0.2.
+    
+    As for the BART's hyperparameters, they have been manually tuned with a few trials-and-errors on another development set\footnote{The development set for the hyperparameters' tuning is composed of 30 sentences for fine-tuning, and 600 sentences for testing}. We have tried three fine-tuning strategies: (1) fine-tuning the full BART model, (2) fine-tuning only the first self-attention layer, (3) fine-tuning the inputs, outputs and layer normalization, following \cite{lu2021pretrained}. The best hyper-parameters were achieved by fine-tuning all BART parameters, with a learning rate of $\lambda = 10^{-4}$ and 100 epochs.
         
     \subsection{Experimental Results}
-    Table \ref{Tab:induction_results} shows the results of all the Induction Network applications including the original one the results of which were reproduced using the implementation by Zhongyu Chen\footnote{https://github.com/zhongyuchen/few-shot-text-classification}.
+    \label{results}
+    Table \ref{Tab:baselines} shows the baselines for the experiments: the result of the Induction Network reported in the \cite{geng-etal-2019-induction}, the reproduced result of this algorithm and the Zero-shot learning setting of the BART model. Table \ref{Tab:in_results} shows the results of all the experiments with the Induction Network. Table \ref{Tab:bart_results} shows the results obtained with the BART model. The values between parentheses give the standard deviation of the results after 5 trials.
     
-        \begin{table}[h!]
+    %\textcolor{blue}{TODO: report statistical confidence interval at %90\% (look for Wald test):
+    %$$\pm 1.96 \sqrt{\frac {p(1-p)}{n=9000}}$$}
+    
+\begin{table}[!htb]
+    \begin{minipage}[t]{.5\linewidth}
+      \vspace{-80pt}
       \centering
-      \begin{tabular}{|c|c|}
+        \begin{tabular}{|c|c|}
         \hline
-        Model & Mean Accuracy (\%) \\
+        Model & Accuracy (\%) \\
         \hline
         Node 1 & 83.5 \\
         Node 2 & 83.3 \\
         Node 3 & 83.1 \\
         Averaging & 84.6 \\
         Stacking & 84.6 \\
-        Reproduced model from \cite{geng2019induction} & 83.9 \\
-        Result reported in \cite{geng2019induction} (SoTA) & 85.6 \\
         \hline
-      \end{tabular}
-      \caption{Results obtained with Induction Network from \cite{geng2019induction}.}\label{Tab:induction_results}
-    \end{table}
-    
-    Table \ref{Tab:bart_results} shows the results obtained with the BART model (with and without fine-tuning). The values between parentheses give the standard deviation of the results after 5 trials.
-    
-    TODO: report statistical confidence interval at 90\% (look for Wald test):
-    $$\pm 1.96 \sqrt{\frac {p(1-p)}{n=9000}}$$
-    
-
-    \begin{table}[h!]
+        \end{tabular}
+        \caption{IN Results.}\label{Tab:in_results}
+      \vspace{15pt}
       \centering
-      \hspace*{-40pt}\begin{tabular}{|c|c|c|c|c|c|}
+      \begin{tabular}{|c|c|}
         \hline
-        Model & Mean accuracy & Books & DVD & Electronics & KH \\
+        Model & Accuracy (\%) \\
         \hline
-        Zero-Shot Learning & 83.0 & 82.7 & 80.2 & 84.3 & 84.8 \\
-        Books node & 85.1[$\pm 0.23$] & 86.4[$\pm 0.2$] & 83.4[$\pm 0.29$] & 85.0[$\pm 0.23$] & 85.3[$\pm 0.33]$ \\
-        Dvd node & 85.2[$\pm 0.11$] & 86.8[$\pm 0.1$] & 83.9[$\pm 0.34$] & 85.0[$\pm 0.22$] & 85.5[$\pm 0.29$]  \\
-        Electronics node & 84.4[$\pm 0.39$] & 84.4[$\pm 0.87$] & 82.1[$\pm 0.68$] & 85.3[$\pm 0.23$] & 86.1[$\pm 0.15$] \\
-        Kitchen housewares node & 85.6[$\pm 0.12$] & 86.5[$\pm 0.22$] & 84.8[$\pm 0.37$] & 85.2[$\pm 0.22$] & 86.2[$\pm 0.17$]  \\
-        Averaging of 4 nodes & 85.9 & 81.5 & 84.6 & 86.2 & 85.9  \\
-        Weighted averaging & - & 86.8 & 84.4 & 86.0 & -  \\
-        Federated Averaging & 85.7 & 86.7 & 84.4 & 85.7 & 86.0  \\
+        IN SoTA\footnote{Published results from \cite{geng-etal-2019-induction}} & 85.6\\
+        IN Repl.\footnote{Reproduced model following the SoTA architecture \cite{geng-etal-2019-induction}} & 83.9\\
+        
+        ZSL & 83.0\\
         \hline
       \end{tabular}
-      \caption{Results obtained with BART.}\label{Tab:bart_results}
-    \end{table}
+      \caption{Baselines.}
+      \label{Tab:baselines}
+    \end{minipage}%
+    \begin{minipage}[t]{.5\linewidth}
+      \centering
+        \begin{tabular}{|c|c|}        
+        \hline
+        Model & Accuracy (\%) \\
+        \hline
+        Node 1.& 85.1[$\pm 0.23$]\\ (Books) &\\
+        Node 2.&85.2[$\pm 0.11$]\\ (Dvd) & \\
+        Node 3.&84.4[$\pm 0.39$]\\ (Electronics) & \\
+        Node 4.&85.6[$\pm 0.12$]\\ (Kitchen H.) & \\
+        Average & 85.9\\
+        Weighted Avg & 85.8\\
+        Federated Avg & 85.7\\
+        Stacking & -\\ 
+          \hline
+        \end{tabular}
+        \caption{BART Results.}\label{Tab:bart_results}
+    \end{minipage} 
+\end{table}
+        
     
+    \subsection{Analysis}
+    The results show that FSL techniques can be successful when training on a limited amount of data. The models derived from Induction Networks, both through Stacking and Averaging, perform better than our replica of the SoTA model (although their published results are reported to be higher than the ones we could reproduce). The models derived from BART models also seem promising when compared to the ZSL baseline.
     
-
+    The results show that the BART model, making use of its prior knowledge derived from its pretraining phase, is able to perform better than the baseline with only 30 examples and 100 epochs (as opposed to the IN needing 10.000 epochs and 95584 training examples). This also contributes to its stability, which, as mentioned before, is something other federated learning models commonly lack.
+    
 %***********************************************************************
 
 
-
     \section{Conclusion}
-    In this paper we have explored the combination of few-shot learning (FSL) and federated learning, which is currently a relevant topic given the increasingly rigid restriction on data protection, since a federated setting simulates the scarcity of data and few-shot learning allows for this scarcity not to be a hindrance.
+    In this paper we employed two FSL architectures to solve a language classification task in a federated settings. Each architecture was chosen to tackle a specific weakness of federated learning, namely (1) the frequency of communication between nodes required during the learning process, requiring local devices to have a relatively high amount of computing power, local memory and a high bandwidth connection, (2) the bias that each node can have towards the whole dataset, and (3) the need for large amounts of training data.
     
-    We explore this possible setting through two main experimental procedures, one by training Induction Networks through meta-learning, and one by fine-tuning BART models, on the task Sentiment Analysis.
-    
-    We showed that by applying FSL, we could obtain on a federated setting, results that are close to the current SoTA trained on a whole dataset. 
+    We proposed a solution to each of the problems through two main experimental procedures: one by training Induction Networks through meta-learning, and one by fine-tuning BART models, on the task Sentiment Analysis and we demonstrated that by applying FSL on a federated setting, results that are close to the current SoTA trained on a whole dataset can be obtained. 
+
+% ****************************************************************************
+% BIBLIOGRAPHY AREA
+% ****************************************************************************
 
 \begin{footnotesize}
- \bibliographystyle{unsrt}
- \bibliography{bib.bib}
+
+\bibliographystyle{unsrt}
+\bibliography{bib.bib}
+
 \end{footnotesize}
 
 %\include{template}

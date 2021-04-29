@@ -38,13 +38,23 @@
 }
 
 
-@misc{geng2019induction,
-      title={Induction Networks for Few-Shot Text Classification}, 
-      author={Ruiying Geng and Binhua Li and Yongbin Li and Xiaodan Zhu and Ping Jian and Jian Sun},
-      year={2019},
-      eprint={1902.10482},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{geng-etal-2019-induction,
+    title = "Induction Networks for Few-Shot Text Classification",
+    author = "Geng, Ruiying  and
+      Li, Binhua  and
+      Li, Yongbin  and
+      Zhu, Xiaodan  and
+      Jian, Ping  and
+      Sun, Jian",
+    booktitle = "Proceedings of the 2019 EMNLP-IJCNLP",
+    month = nov,
+    year = "2019",
+    address = "Hong Kong, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/D19-1403",
+    doi = "10.18653/v1/D19-1403",
+    pages = "3904--3913",
+    abstract = "Text classification tends to struggle when data is deficient or when it needs to adapt to unseen classes. In such challenging scenarios, recent studies have used meta-learning to simulate the few-shot task, in which new queries are compared to a small support set at the sample-wise level. However, this sample-wise comparison may be severely disturbed by the various expressions in the same class. Therefore, we should be able to learn a general representation of each class in the support set and then compare it to new queries. In this paper, we propose a novel Induction Network to learn such a generalized class-wise representation, by innovatively leveraging the dynamic routing algorithm in meta-learning. In this way, we find the model is able to induce and generalize better. We evaluate the proposed model on a well-studied sentiment classification dataset (English) and a real-world dialogue intent classification dataset (Chinese). Experiment results show that on both datasets, the proposed model significantly outperforms the existing state-of-the-art approaches, proving the effectiveness of class-wise generalization in few-shot text classification.",
 }
 
 
@@ -60,15 +70,6 @@
  year = {2016}
 }
 
-
-@inproceedings{mcmahan2017communication,
-  title={Communication-efficient learning of deep networks from decentralized data},
-  author={McMahan, Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and y Arcas, Blaise Aguera},
-  booktitle={Artificial Intelligence and Statistics},
-  pages={1273--1282},
-  year={2017},
-  organization={PMLR}
-}
 
 @misc{lewis2019bart,
       title={BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension}, 
@@ -105,3 +106,63 @@ abstract = "This paper introduces stacked generalization, a scheme for minimizin
 
 @inproceedings{zero,
 author={Lampert, Christoph H. and Nickisch, Hannes and Harmeling, Stefan},  booktitle={2009 IEEE Conference on Computer Vision and Pattern Recognition},   title={Learning to detect unseen object classes by between-class attribute transfer},   year={2009},  volume={},  number={},  pages={951-958},  doi={10.1109/CVPR.2009.5206594}}
+
+@article{problems,
+url = {http://dx.doi.org/10.1561/2200000083},
+year = {2021},
+volume = {14},
+journal = {Foundations and Trends in Machine Learning},
+title = {Advances and Open Problems in Federated Learning},
+doi = {10.1561/2200000083},
+issn = {1935-8237},
+number = {1},
+pages = {-},
+author = {Edited by: Peter Kairouz and H. Brendan McMahan}
+}
+
+@inproceedings{sabour2017dynamic,
+  title={Dynamic routing between capsules},
+  author={Sabour, Sara and Frosst, Nicholas and Hinton, Geoffrey E},
+  booktitle={Proceedings of the 31st International Conference on Neural Information Processing Systems},
+  pages={3859--3869},
+  year={2017}
+}
+
+@inproceedings{socher2013reasoning,
+  title={Reasoning with neural tensor networks for knowledge base completion},
+  author={Socher, Richard and Chen, Danqi and Manning, Christopher D and Ng, Andrew},
+  booktitle={Advances in neural information processing systems},
+  pages={926--934},
+  year={2013},
+  organization={Citeseer}
+}
+
+
+@inproceedings{mishra2018simple,
+  title={A Simple Neural Attentive Meta-Learner},
+  author={Mishra, Nikhil and Rohaninejad, Mostafa and Chen, Xi and Abbeel, Pieter},
+  booktitle={International Conference on Learning Representations},
+  year={2018}
+}
+@inproceedings{sung2018learning,
+  title={Learning to compare: Relation network for few-shot learning},
+  author={Sung, Flood and Yang, Yongxin and Zhang, Li and Xiang, Tao and Torr, Philip HS and Hospedales, Timothy M},
+  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages={1199--1208},
+  year={2018}
+}
+
+@inproceedings{bart,
+  title={BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension},
+  author={Lewis, Mike and Liu, Yinhan and Goyal, Naman and Ghazvininejad, Marjan and Mohamed, Abdelrahman and Levy, Omer and Stoyanov, Veselin and Zettlemoyer, Luke},
+  booktitle={Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics},
+  pages={7871--7880},
+  year={2020}
+}
+
+@article{lu2021pretrained,
+  title={Pretrained transformers as universal computation engines},
+  author={Lu, Kevin and Grover, Aditya and Abbeel, Pieter and Mordatch, Igor},
+  journal={arXiv preprint arXiv:2103.05247},
+  year={2021}
+}
