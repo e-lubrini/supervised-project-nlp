@@ -7,8 +7,8 @@ In the Natural Language Processing (NLP) domain, zero-shot learning has become a
 
 ## Repo Structure
 
-supervised-project-nlp
-    ├── Bibliography
-    ├── Paper
-    └── Realisation
-    
+    supervised-project-nlp
+        ├── Bibliography
+        ├── Paper
+        └── Realisation
+
